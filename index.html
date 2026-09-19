@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tawakkul</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3efe6; --ink: #17302b; --muted: #55675f; --gold: #9a6f17;
+    --btn: #1f6f5c; --btn-ink: #f7f4ec; --line: #cfc8b6; --paper: #ece5d2;
+    --blot: #2b2a25; --glow: 233,190,90;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1d1a; --ink: #eee9da; --muted: #9aaba5; --gold: #dcb85e;
+      --btn: #4fbf9f; --btn-ink: #0b1714; --line: #2a3f38; --paper: #223430; --blot: #070c0b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1d1a; --ink: #eee9da; --muted: #9aaba5; --gold: #dcb85e;
+    --btn: #4fbf9f; --btn-ink: #0b1714; --line: #2a3f38; --paper: #223430; --blot: #070c0b;
+  }
+  body.dim { --bg: #050908; --ink: #93a29b; --muted: #6a7871; --gold: #a88a45; --line: #17251f; --paper: #0b1412; --btn: #2f5a4d; --btn-ink: #cfd8d3; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Fraunces", Georgia, "Times New Roman", serif;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    padding: 22px 16px 44px; -webkit-tap-highlight-color: transparent; transition: background .6s, color .6s;
+  }
+  .wrap { width: min(92vw, 400px); display: flex; flex-direction: column; align-items: center; }
+  .brand { margin: 0; font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .dots { display: flex; gap: 8px; margin: 10px 0 14px; }
+  .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); display: block; transition: background .3s, transform .3s; }
+  .dots i.on { background: var(--gold); transform: scale(1.25); }
+  .dots i.past { background: var(--btn); }
+  .stage { position: relative; width: 100%; aspect-ratio: 1; border-radius: 20px; background: var(--paper); border: 1px solid var(--line); overflow: hidden; transition: background .6s; }
+  canvas { width: 100%; height: 100%; display: block; }
+  .cue { margin: 12px 0 0; min-height: 3em; text-align: center; }
+  .cue .a { display: block; font-size: 1.1rem; font-weight: 600; min-height: 1.4em; }
+  .cue .b { display: block; font-size: .95rem; color: var(--muted); margin-top: 2px; min-height: 1.3em; }
+  h2 { font-size: 1.6rem; font-weight: 600; margin: 6px 0 0; text-align: center; line-height: 1.2; }
+  .lead { font-size: 1.08rem; margin: 8px 0 0; text-align: center; line-height: 1.4; }
+  .detail { font-size: .97rem; color: var(--muted); margin: 10px 0 0; text-align: center; line-height: 1.55; }
+  .arabic { font-family: "Amiri", "Noto Naskh Arabic", "Times New Roman", serif; color: var(--gold); font-size: 1.75rem; line-height: 1.7; margin: 12px 0 0; text-align: center; min-height: 1.7em; transition: opacity .2s; }
+  .meaning { font-size: .92rem; color: var(--muted); margin: 2px 0 0; text-align: center; line-height: 1.5; min-height: 1.5em; }
+  .extras { width: 100%; margin-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .extras[hidden] { display: none; }
+  .addrow { display: flex; gap: 8px; width: 100%; }
+  input[type="text"] {
+    flex: 1; min-width: 0; font: 400 1rem "Fraunces", Georgia, serif; color: var(--ink); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px; padding: 12px 16px;
+  }
+  input[type="text"]::placeholder { color: var(--muted); }
+  input[type="text"]:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chip, .ghost {
+    appearance: none; background: transparent; color: var(--ink); border: 1px solid var(--line);
+    border-radius: 999px; padding: 8px 14px; font: 400 .92rem "Fraunces", Georgia, serif; cursor: pointer;
+  }
+  .chip.x::after { content: " \00D7"; color: var(--muted); }
+  .primary {
+    appearance: none; border: 0; cursor: pointer; background: var(--btn); color: var(--btn-ink);
+    border-radius: 999px; padding: 12px 22px; font: 600 1rem "Fraunces", Georgia, serif;
+  }
+  .primary.wide { padding: 15px 30px; font-size: 1.05rem; }
+  .row { display: flex; gap: 10px; margin-top: 20px; }
+  button:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .ghost[disabled] { opacity: .4; cursor: default; }
+  .lbl { font-size: .85rem; color: var(--muted); margin: 0; }
+  .note { margin: 22px 0 0; font-size: .82rem; color: var(--muted); text-align: center; line-height: 1.5; }
+  body.dim .dots, body.dim .note, body.dim .brand, body.dim .row { opacity: .4; }
+  body.dim .stage { opacity: .85; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="brand">Tawakkul: trust in Allah</p>
+  <div class="dots" id="dots" aria-hidden="true"></div>
+
+  <div class="stage">
+    <canvas id="cv" role="img" aria-label="Stones you name rest below a light. Each one rises into the light and dissolves as you breathe."></canvas>
+  </div>
+  <p class="cue"><span class="a" id="cueA"></span><span class="b" id="cueB"></span></p>
+
+  <h2 id="title"></h2>
+  <p class="lead" id="lead"></p>
+  <p class="detail" id="detail"></p>
+  <p class="arabic" id="ar" lang="ar" dir="rtl"></p>
+  <p class="meaning" id="mean"></p>
+
+  <div class="extras" id="ex0" hidden>
+    <div class="addrow">
+      <input type="text" id="carry" maxlength="40" placeholder="What are you carrying?" aria-label="Something you are carrying">
+      <button class="primary" id="add" type="button">Add</button>
+    </div>
+    <div class="chips" id="sugg"></div>
+    <p class="lbl" id="listLbl" hidden>Tap one to remove it</p>
+    <div class="chips" id="list"></div>
+  </div>
+
+  <div class="extras" id="ex1" hidden>
+    <input type="text" id="part" maxlength="60" placeholder="One thing I will do today (optional)" aria-label="One thing you will do today" style="width:100%; flex: none;">
+    <p class="lbl">Then the result is not yours to carry.</p>
+  </div>
+
+  <div class="extras" id="ex2" hidden>
+    <button class="primary" id="start" type="button">Start breathing</button>
+  </div>
+
+  <div class="extras" id="ex3" hidden>
+    <button class="ghost" id="dim" type="button">Dim the screen for sleep</button>
+  </div>
+
+  <div class="row">
+    <button class="ghost" id="back" type="button">Back</button>
+    <button class="primary wide" id="next" type="button">Continue</button>
+  </div>
+
+  <p class="note">What you write stays on this page only. It is not saved or sent anywhere. Repeat this each night for a week and the trust settles deeper.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var AFF = [
+    { ar: "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ", m: "Allah is enough for us, and He is the best disposer of affairs. (Quran 3:173)" },
+    { ar: "وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ", m: "Whoever relies on Allah, He is enough for him. (Quran 65:3)" },
+    { ar: "وَأُفَوِّضُ أَمْرِي إِلَى اللَّهِ", m: "I entrust my affair to Allah. (Quran 40:44)" },
+    { ar: "إِنَّ اللَّهَ يُحِبُّ الْمُتَوَكِّلِينَ", m: "Indeed, Allah loves those who rely on Him. (Quran 3:159)" },
+    { ar: "حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ ۖ عَلَيْهِ تَوَكَّلْتُ", m: "Allah is enough for me. There is no god but Him. In Him I trust. (Quran 9:129)" },
+    { ar: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", m: "There is no power and no strength except with Allah." }
+  ];
+  var STEPS = [
+    { t: "Name what you carry", lead: "Write everything that weighs on your heart.",
+      d: "Provision, health, family, a decision, a fear, a person, the future. Each one becomes a stone below, and one last stone, \"Everything else\", is added for you.",
+      ar: "وَأُفَوِّضُ أَمْرِي إِلَى اللَّهِ", m: "\"I entrust my affair to Allah.\" (Quran 40:44)" },
+    { t: "Do your part first", lead: "Tie your camel, then trust Allah.",
+      d: "A man asked the Prophet \uFDFA whether to tie his camel and trust, or leave it loose and trust. He said to tie it and trust (Tirmidhi). Tawakkul is not doing nothing. It is doing your best, then handing over the result.",
+      ar: "اعْقِلْهَا وَتَوَكَّلْ", m: "\"Tie it, then rely on Allah.\"" },
+    { t: "Hand it over", lead: "Breathe in. Breathe out. One stone at a time.",
+      d: "On each out-breath, say Tawakkaltu 'ala Allah and watch one stone rise into the light and dissolve. See it clearly and let your shoulders drop. Do not take it back.",
+      ar: "تَوَكَّلْتُ عَلَى اللَّهِ", m: "\"I have put my trust in Allah.\"" },
+    { t: "Rest in Him", lead: "Everything is in the best of hands.",
+      d: "Stay as long as you like and let each phrase arrive with the breath. Repeating it slowly, especially before sleep, is how trust becomes your first reaction.",
+      ar: "", m: "" }
+  ];
+  var SUGG = ["Provision", "Health", "Family", "The future", "A fear", "A decision", "A person", "My sins"];
+  var REST = 3, MAXI = 12;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- colours ---------- */
+  var C = { blot: [43, 42, 37], glow: [233, 190, 90], line: [207, 200, 182] };
+  function toRGB(h) {
+    h = String(h).trim();
+    if (h.charAt(0) === "#") {
+      if (h.length === 4) h = "#" + h[1] + h[1] + h[2] + h[2] + h[3] + h[3];
+      return [parseInt(h.substr(1, 2), 16), parseInt(h.substr(3, 2), 16), parseInt(h.substr(5, 2), 16)];
+    }
+    var m = h.match(/\d+/g); return m ? m.slice(0, 3).map(Number) : [0, 0, 0];
+  }
+  function readColors() {
+    var cs = getComputedStyle(document.body);
+    C.blot = toRGB(cs.getPropertyValue("--blot")); C.glow = toRGB(cs.getPropertyValue("--glow")); C.line = toRGB(cs.getPropertyValue("--line"));
+  }
+  function rgba(c, a) { return "rgba(" + Math.round(c[0]) + "," + Math.round(c[1]) + "," + Math.round(c[2]) + "," + a + ")"; }
+  function mix(a, b, f) { return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f]; }
+  function ease(x) { return x * x * (3 - 2 * x); }
+
+  /* ---------- canvas ---------- */
+  var cv = $("cv"), ctx = cv.getContext("2d"), W = 300;
+  function resize() {
+    var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width || 300;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(W * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    layout();
+  }
+  window.addEventListener("resize", resize);
+
+  /* ---------- state ---------- */
+  var items = [], pills = [], motes = [];
+  var step = 0, running = false, touched = false, finished = false;
+  var M = 10, bt = 0, lastRel = 0, t = 0, eS = 0.3, L = 0.15, affIdx = -1, part = "";
+  var wake = null;
+
+  function shorten(s) { return s.length > 22 ? s.slice(0, 21) + "\u2026" : s; }
+  function makePill(label, drop) {
+    return { label: label, short: shorten(label), w: 80, h: 28, x: W / 2 + (Math.random() - 0.5) * 60, y: drop ? -30 : W * 0.8,
+      tx: W / 2, ty: W * 0.8, rot: (Math.random() - 0.5) * 0.14, state: "rest", u: 0, sx: 0, sy: 0 };
+  }
+  function buildPills() {
+    pills = items.map(function (l) { return makePill(l, true); });
+    pills.push(makePill("Everything else", true));
+    touched = false; finished = false; bt = 0; lastRel = 0;
+    layout();
+  }
+  function layout() {
+    var sc = W / 380, ph = 28 * sc, gap = 6 * sc, maxW = W * 0.92;
+    ctx.font = (14 * sc) + "px Fraunces, Georgia, serif";
+    var rest = pills.filter(function (p) { return p.state === "rest"; });
+    rest.forEach(function (p) { p.w = ctx.measureText(p.short).width + 26 * sc; p.h = ph; });
+    var rows = [], cur = [], cw = 0;
+    rest.forEach(function (p) {
+      var add = p.w + (cur.length ? gap : 0);
+      if (cur.length && cw + add > maxW) { rows.push({ list: cur, w: cw }); cur = []; cw = 0; add = p.w; }
+      cur.push(p); cw += add;
+    });
+    if (cur.length) rows.push({ list: cur, w: cw });
+    rows.forEach(function (row, ri) {
+      var x = (W - row.w) / 2, y = W - 22 * sc - ph / 2 - ri * (ph + gap);
+      row.list.forEach(function (p) { p.tx = x + p.w / 2; p.ty = y; x += p.w + gap; });
+    });
+  }
+
+  function releaseNext() {
+    for (var i = 0; i < pills.length; i++) {
+      if (pills[i].state === "rest") {
+        var p = pills[i]; p.state = "rise"; p.u = 0; p.sx = p.x; p.sy = p.y;
+        $("cueB").textContent = "Handing over: " + p.label;
+        layout(); return;
+      }
+    }
+  }
+  function burst(x, y) {
+    if (reduce) return;
+    for (var i = 0; i < 14; i++) {
+      var a = Math.random() * 6.2832, sp = 18 + Math.random() * 40;
+      motes.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 10, life: 0, dur: 1.4 + Math.random() * 1.4, s: 1.4 + Math.random() * 2 });
+    }
+  }
+
+  /* ---------- update + draw ---------- */
+  function update(dt) {
+    t += dt;
+    var targetE, lightT = 0.15, ph = t % 10;
+    if (running) {
+      bt += dt;
+      var rel = Math.floor((bt + 6) / 10);
+      if (rel > lastRel) { lastRel = rel; releaseNext(); }
+      var p = bt % 10, k = Math.min(M, Math.floor(bt / 10) + 1);
+      targetE = p < 4 ? ease(p / 4) : 1 - ease((p - 4) / 6);
+      $("cueA").textContent = p < 4 ? "Breathe in. Allah is enough for you." : "Say Tawakkaltu 'ala Allah. Let it rise.";
+      $("title").textContent = "Hand it over \u00B7 breath " + k + " of " + M;
+      lightT = 0.15 + 0.85 * Math.min(1, bt / (M * 10));
+      if (bt >= M * 10) finishBreathing();
+    } else {
+      targetE = 0.25 + 0.5 * (ph < 4 ? ease(ph / 4) : 1 - ease((ph - 4) / 6));
+      if (step === REST) { targetE = ph < 4 ? ease(ph / 4) : 1 - ease((ph - 4) / 6); lightT = 1; }
+      else if (step === 2 && (finished || touched)) lightT = finished ? 1 : 0.15 + 0.85 * Math.min(1, bt / (M * 10));
+    }
+    if (reduce) targetE = 0.5;
+    eS += (targetE - eS) * Math.min(1, dt * 6);
+    L += (lightT - L) * Math.min(1, dt * 1.6);
+
+    var ly = W * 0.17, i, p2;
+    for (i = pills.length - 1; i >= 0; i--) {
+      p2 = pills[i];
+      if (p2.state === "rest") {
+        var s = Math.min(1, dt * 7);
+        p2.x += (p2.tx - p2.x) * s; p2.y += (p2.ty - p2.y) * s;
+      } else if (p2.state === "rise") {
+        p2.u += dt / (reduce ? 1.2 : 3.6);
+        var u = Math.min(1, p2.u), e2 = ease(u);
+        p2.x = p2.sx + (W / 2 - p2.sx) * e2 + (reduce ? 0 : Math.sin(u * 6) * 10 * (W / 380) * (1 - u));
+        p2.y = p2.sy + (ly - p2.sy) * e2;
+        if (p2.u >= 1) { burst(p2.x, p2.y); pills.splice(i, 1); }
+      }
+    }
+    if (step === REST && !reduce && Math.random() < dt * 4) {
+      motes.push({ x: Math.random() * W, y: W * (0.6 + Math.random() * 0.4), vx: (Math.random() - 0.5) * 6, vy: -(8 + Math.random() * 14), life: 0, dur: 3 + Math.random() * 3, s: 1.3 + Math.random() * 1.8 });
+    }
+    for (i = motes.length - 1; i >= 0; i--) {
+      var m = motes[i]; m.life += dt / m.dur; m.x += m.vx * dt; m.y += m.vy * dt; m.vx *= 0.99;
+      if (m.life >= 1) motes.splice(i, 1);
+    }
+    if (step === REST) updateRest();
+  }
+
+  function rr(x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  function draw() {
+    var w = W, sc = w / 380, e = eS, lx = w / 2, ly = w * 0.17;
+    ctx.clearRect(0, 0, w, w);
+
+    var beam = ctx.createLinearGradient(0, ly, 0, w);
+    beam.addColorStop(0, rgba(C.glow, 0.3 * L)); beam.addColorStop(1, rgba(C.glow, 0.02 * L));
+    ctx.fillStyle = beam; ctx.fillRect(0, 0, w, w);
+
+    var R = w * (0.2 + 0.36 * L) * (0.94 + 0.08 * e);
+    var g = ctx.createRadialGradient(lx, ly, 0, lx, ly, R);
+    g.addColorStop(0, rgba(C.glow, 0.55 + 0.4 * L)); g.addColorStop(0.45, rgba(C.glow, 0.18 + 0.3 * L)); g.addColorStop(1, rgba(C.glow, 0));
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(lx, ly, R, 0, 6.2832); ctx.fill();
+
+    for (var i = 0; i < motes.length; i++) {
+      var m = motes[i];
+      ctx.fillStyle = rgba(C.glow, (1 - m.life) * 0.85);
+      ctx.beginPath(); ctx.arc(m.x, m.y, m.s * sc, 0, 6.2832); ctx.fill();
+    }
+
+    ctx.font = (14 * sc) + "px Fraunces, Georgia, serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    for (var j = 0; j < pills.length; j++) {
+      var p = pills[j], f = p.state === "rise" ? Math.min(1, p.u) : 0;
+      var alpha = f < 0.65 ? 1 : 1 - (f - 0.65) / 0.35, s2 = 1 - 0.55 * f;
+      var col = mix(C.blot, C.glow, Math.min(1, f * 1.5));
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot * (1 - f)); ctx.scale(s2, s2); ctx.globalAlpha = Math.max(0, alpha);
+      rr(-p.w / 2, -p.h / 2, p.w, p.h, p.h / 2);
+      ctx.fillStyle = rgba(col, 0.92); ctx.fill();
+      ctx.fillStyle = rgba(mix([244, 238, 220], C.blot, Math.min(1, f * 1.4)), 1);
+      ctx.fillText(p.short, 0, 1);
+      ctx.restore();
+    }
+
+    var coreR = w * 0.035 * (0.9 + 0.45 * e);
+    ctx.fillStyle = rgba(mix(C.glow, [255, 250, 235], 0.45), 0.75 + 0.25 * L);
+    ctx.beginPath(); ctx.arc(lx, ly, coreR, 0, 6.2832); ctx.fill();
+  }
+
+  var last = 0, frame = 0;
+  function loop(ts) {
+    var dt = Math.min(0.05, (ts - last) / 1000 || 0); last = ts; frame++;
+    if (frame % 30 === 1) readColors();
+    update(dt); draw();
+    requestAnimationFrame(loop);
+  }
+
+  /* ---------- rest screen ---------- */
+  function updateRest() {
+    var rp = t % 10, idx = Math.floor(t / 10) % AFF.length;
+    if (idx !== affIdx) { affIdx = idx; $("ar").textContent = AFF[idx].ar; $("mean").textContent = AFF[idx].m; }
+    var o = rp < 1.5 ? rp / 1.5 : (rp > 8.5 ? (10 - rp) / 1.5 : 1);
+    $("ar").style.opacity = o; $("mean").style.opacity = o;
+  }
+  function holdAwake(on) {
+    try {
+      if (on && navigator.wakeLock && !wake) {
+        navigator.wakeLock.request("screen").then(function (l) { wake = l; l.addEventListener("release", function () { wake = null; }); }).catch(function () {});
+      } else if (!on && wake) { wake.release(); wake = null; }
+    } catch (e) {}
+  }
+
+  /* ---------- carry list ---------- */
+  function renderList() {
+    var box = $("list"); box.innerHTML = "";
+    items.forEach(function (label, i) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "chip x"; b.textContent = label;
+      b.setAttribute("aria-label", "Remove " + label);
+      b.addEventListener("click", function () {
+        items.splice(i, 1);
+        var idx = -1; for (var k = 0; k < pills.length - 1; k++) if (pills[k].label === label) { idx = k; break; }
+        if (idx >= 0) pills.splice(idx, 1);
+        layout(); renderList();
+      });
+      box.appendChild(b);
+    });
+    $("listLbl").hidden = items.length === 0;
+  }
+  function addItem(label) {
+    label = (label || "").replace(/\s+/g, " ").trim();
+    if (!label || items.length >= MAXI) return;
+    for (var i = 0; i < items.length; i++) if (items[i].toLowerCase() === label.toLowerCase()) return;
+    items.push(label);
+    pills.splice(pills.length - 1, 0, makePill(label, true));
+    layout(); renderList();
+  }
+  SUGG.forEach(function (s) {
+    var b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = s;
+    b.addEventListener("click", function () { addItem(s); });
+    $("sugg").appendChild(b);
+  });
+  $("add").addEventListener("click", function () { addItem($("carry").value); $("carry").value = ""; $("carry").focus(); });
+  $("carry").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addItem(this.value); this.value = ""; } });
+  $("part").addEventListener("input", function () { part = this.value.trim(); });
+
+  /* ---------- breathing ---------- */
+  var startBtn = $("start");
+  function finishBreathing() {
+    running = false; finished = true; bt = M * 10;
+    $("cueA").textContent = "Alhamdulillah. It is in His hands.";
+    $("cueB").textContent = "Rest here a moment, then continue.";
+    $("title").textContent = "Handed over";
+    startBtn.textContent = "Breathe again";
+  }
+  startBtn.addEventListener("click", function () {
+    if (running) { running = false; startBtn.textContent = "Resume"; $("cueA").textContent = "Paused. Breathe naturally."; return; }
+    if (!touched || finished) {
+      if (finished || touched) buildPills();
+      M = pills.length + 3; bt = 0; lastRel = 0; finished = false; L = 0.15;
+    }
+    touched = true; running = true; startBtn.textContent = "Pause";
+  });
+  $("dim").addEventListener("click", function () {
+    var on = document.body.classList.toggle("dim");
+    this.textContent = on ? "Brighten the screen" : "Dim the screen for sleep";
+    readColors();
+  });
+
+  /* ---------- steps ---------- */
+  var dotsEl = $("dots");
+  STEPS.forEach(function () { dotsEl.appendChild(document.createElement("i")); });
+
+  function go(i) {
+    var prev = step;
+    step = i; running = false;
+    if (i === 0 && prev === REST) { items = []; part = ""; $("carry").value = ""; $("part").value = ""; renderList(); buildPills(); }
+    else if (prev === REST || (i < 2 && touched) || (i === 2 && (touched || finished) && prev !== 3)) buildPills();
+    if (i === REST) pills.forEach(function (q) { if (q.state === "rest") { q.state = "rise"; q.u = 0; q.sx = q.x; q.sy = q.y; } });
+    var s = STEPS[i];
+    $("title").textContent = s.t;
+    $("lead").textContent = i === REST && part ? "You did your part: " + part + ". The rest is in the best of hands." : s.lead;
+    $("detail").textContent = s.d;
+    $("ar").textContent = s.ar; $("mean").textContent = s.m; $("ar").style.opacity = 1; $("mean").style.opacity = 1;
+    affIdx = -1; if (i === REST) t = 0;
+    $("cueA").textContent = ""; $("cueB").textContent = "";
+    for (var k = 0; k < 4; k++) $("ex" + k).hidden = k !== i;
+    startBtn.textContent = "Start breathing";
+    $("back").disabled = i === 0;
+    $("next").textContent = i === REST ? "Start again" : "Continue";
+    var nodes = dotsEl.children;
+    for (var n = 0; n < nodes.length; n++) nodes[n].className = n === i ? "on" : (n < i ? "past" : "");
+    holdAwake(i === REST);
+    if (i !== REST && document.body.classList.contains("dim")) { document.body.classList.remove("dim"); $("dim").textContent = "Dim the screen for sleep"; }
+  }
+  $("next").addEventListener("click", function () { go(step === REST ? 0 : step + 1); window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); });
+  $("back").addEventListener("click", function () { if (step > 0) go(step - 1); });
+
+  resize(); readColors(); buildPills(); go(0);
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
