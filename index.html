@@ -1,10 +1,9 @@
-<!-- Single-file PWA version: no manifest.js/service-worker.js companion file required. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tawakkul — 90 Day Journey | Trust in Allah</title>
+<title>Tawakkul</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
 <style>
@@ -75,93 +74,11 @@
   .note { margin: 22px 0 0; font-size: .82rem; color: var(--muted); text-align: center; line-height: 1.5; }
   body.dim .dots, body.dim .note, body.dim .brand, body.dim .row { opacity: .4; }
   body.dim .stage { opacity: .85; }
-
-  .install-pwa { margin: 4px 0 10px; display: none; }
-  .install-pwa.show { display: inline-flex; }
-
-
-  .tracker { width:100%; margin-top:18px; padding:14px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.12); }
-  .tracker-top { display:flex; justify-content:space-between; gap:10px; font-size:.88rem; color:var(--muted); }
-  .tracker-top strong { color:var(--ink); }
-  .progress { height:7px; background:var(--line); border-radius:99px; overflow:hidden; margin:10px 0 12px; }
-  .progress span { display:block; height:100%; width:1.1%; background:var(--gold); border-radius:99px; transition:width .4s; }
-  .reminder-row { display:flex; gap:10px; }
-  .reminder-row label { flex:1; font-size:.78rem; color:var(--muted); display:flex; flex-direction:column; gap:5px; }
-  .reminder-row input { width:100%; color:var(--ink); background:transparent; border:1px solid var(--line); border-radius:10px; padding:8px; font:inherit; }
-  .reminder-actions { display:flex; gap:8px; margin-top:10px; }
-  .reminder-actions button { flex:1; font-size:.78rem; padding:9px 10px; }
-  @media(max-width:360px){ .reminder-row{flex-direction:column;} }
-
-
-  .seo-content { width:100%; margin-top:28px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); line-height:1.6; }
-  .seo-content h1,.seo-content h2 { color:var(--ink); text-align:left; }
-  .seo-content h1 { font-size:1.35rem; margin:0 0 8px; }
-  .seo-content h2 { font-size:1.05rem; margin:18px 0 5px; }
-  .seo-content p { font-size:.88rem; margin:0; }
-
 </style>
-
-  <meta name="theme-color" content="#17302b">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Tawakkul">
-  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Tawakkul%20%5Cu2014%20Trust%20in%20Allah%22%2C%22short_name%22%3A%22Tawakkul%22%2C%22description%22%3A%22A%20quiet%20breathing%20and%20reflection%20experience%20for%20Tawakkul.%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f3efe6%22%2C%22theme_color%22%3A%22%2317302b%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%5D%7D">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2317302b'/%3E%3Ccircle cx='32' cy='32' r='15' fill='%23dcb85e'/%3E%3C/svg%3E">
-
-
-  <meta name="description" content="Tawakkul 90 Day Journey — a simple Islamic reflection, breathing and daily trust-in-Allah practice with morning and night reminders.">
-  <meta name="keywords" content="Tawakkul, Islamic app, Tawakkul app, trust in Allah, Allah, Islamic reminder, Muslim daily routine, Islamic mindfulness, Quran reflection, morning dhikr, night dhikr, 90 day challenge, Muslim self improvement">
-  <meta name="author" content="Tawakkul">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta name="bingbot" content="index, follow">
-  <meta name="application-name" content="Tawakkul">
-  <meta name="apple-mobile-web-app-title" content="Tawakkul">
-  <link rel="canonical" href="https://YOUR-DOMAIN.example/">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Tawakkul — 90 Day Journey">
-  <meta property="og:description" content="A peaceful 90-day Tawakkul practice with morning and night reminders, breathing and reflection.">
-  <meta property="og:url" content="https://YOUR-DOMAIN.example/">
-  <meta property="og:site_name" content="Tawakkul">
-  <meta property="og:locale" content="en_US">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Tawakkul — 90 Day Journey">
-  <meta name="twitter:description" content="Build a daily habit of Tawakkul with a simple 90-day morning and night practice.">
-
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@graph":[
-      {
-        "@type":"WebApplication",
-        "@id":"https://YOUR-DOMAIN.example/#app",
-        "name":"Tawakkul — 90 Day Journey",
-        "url":"https://YOUR-DOMAIN.example/",
-        "description":"A web app for a 90-day Tawakkul practice with breathing, Quran-based reflection, and morning and night reminders.",
-        "applicationCategory":"LifestyleApplication",
-        "operatingSystem":"Web Browser",
-        "browserRequirements":"Requires JavaScript and a modern web browser",
-        "isAccessibleForFree":true
-      },
-      {
-        "@type":"WebSite",
-        "@id":"https://YOUR-DOMAIN.example/#website",
-        "url":"https://YOUR-DOMAIN.example/",
-        "name":"Tawakkul",
-        "description":"Tawakkul 90 Day Journey"
-      }
-    ]
-  }
-  </script>
-
 </head>
 <body>
 <div class="wrap">
   <p class="brand">Tawakkul: trust in Allah</p>
-<button class="ghost install-pwa" id="installPwa" type="button">Install app</button>
   <div class="dots" id="dots" aria-hidden="true"></div>
 
   <div class="stage">
@@ -198,41 +115,10 @@
     <button class="ghost" id="dim" type="button">Dim the screen for sleep</button>
   </div>
 
-
-  <div class="tracker" id="tracker">
-    <div class="tracker-top">
-      <strong id="dayCount">Day 1 of 90</strong>
-      <span id="streakStatus">Morning + Night</span>
-    </div>
-    <div class="progress"><span id="progressBar"></span></div>
-    <div class="reminder-row">
-      <label>Morning <input id="morningTime" type="time" value="07:00"></label>
-      <label>Night <input id="nightTime" type="time" value="21:00"></label>
-    </div>
-    <div class="reminder-actions">
-      <button class="ghost" id="notifyBtn" type="button">Enable reminders</button>
-      <button class="ghost" id="reset90" type="button">Reset 90 days</button>
-    </div>
-    <p class="lbl" id="reminderInfo">Set your times and enable notifications. Your progress is stored on this device.</p>
-  </div>
-
   <div class="row">
     <button class="ghost" id="back" type="button">Back</button>
     <button class="primary wide" id="next" type="button">Continue</button>
   </div>
-
-
-  <section class="seo-content" aria-label="About Tawakkul 90 Day Journey">
-    <h1>Tawakkul — 90 Day Journey</h1>
-    <p>Tawakkul is a simple 90-day Islamic daily practice for reflecting, breathing, doing your part, and placing the result in the hands of Allah.</p>
-    <h2>Daily Tawakkul Practice</h2>
-    <p>Use the app in the morning and at night. Set your reminder times, complete your reflection, and continue your 90-day journey one day at a time.</p>
-    <h2>What is Tawakkul?</h2>
-    <p>Tawakkul means relying upon Allah while taking the appropriate means. This experience combines quiet breathing, reflection and Quranic reminders to encourage a consistent daily practice.</p>
-    <h2>90 Day Islamic Habit</h2>
-    <p>Track your progress from Day 1 to Day 90. Your progress and reminder preferences are stored locally on your device.</p>
-  </section>
-
 
   <p class="note">What you write stays on this page only. It is not saved or sent anywhere. Repeat this each night for a week and the trust settles deeper.</p>
 </div>
@@ -267,119 +153,6 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-
-
-  /* ---------- 90-day morning + night tracker ---------- */
-  var TRACK_KEY = "tawakkul90_v1";
-  var track = null;
-  try { track = JSON.parse(localStorage.getItem(TRACK_KEY) || "null"); } catch(e) {}
-  if (!track || !track.startDate) {
-    track = { startDate: new Date().toISOString().slice(0,10), morning:false, night:false, lastMorning:"", lastNight:"", morningTime:"07:00", nightTime:"21:00" };
-    localStorage.setItem(TRACK_KEY, JSON.stringify(track));
-  }
-
-  function localDateKey(d) {
-    d = d || new Date();
-    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-  }
-  function dayNumber() {
-    var a = new Date(track.startDate+"T00:00:00"), b = new Date();
-    a.setHours(0,0,0,0); b.setHours(0,0,0,0);
-    return Math.min(90, Math.max(1, Math.floor((b-a)/86400000)+1));
-  }
-  function saveTrack() {
-    localStorage.setItem(TRACK_KEY, JSON.stringify(track));
-    renderTracker();
-  }
-  function renderTracker() {
-    var d = dayNumber(), pct = Math.min(100, d / 90 * 100);
-    $("dayCount").textContent = "Day " + d + " of 90";
-    $("progressBar").style.width = pct + "%";
-    $("streakStatus").textContent = (track.morning ? "Morning ✓" : "Morning") + " · " + (track.night ? "Night ✓" : "Night");
-    $("morningTime").value = track.morningTime || "07:00";
-    $("nightTime").value = track.nightTime || "21:00";
-    $("notifyBtn").textContent = ("Notification" in window && Notification.permission === "granted") ? "Reminders enabled ✓" : "Enable reminders";
-  }
-
-  function markSession(type) {
-    var today = localDateKey();
-    if (type === "morning") { track.morning = true; track.lastMorning = today; }
-    if (type === "night") { track.night = true; track.lastNight = today; }
-    saveTrack();
-  }
-
-  // A completed morning/night session is counted when the user reaches the relevant part of the app.
-  function detectSession() {
-    var h = new Date().getHours();
-    if (h < 12) markSession("morning"); else markSession("night");
-  }
-
-  $("notifyBtn").addEventListener("click", async function() {
-    if (!("Notification" in window)) {
-      $("reminderInfo").textContent = "This browser does not support notifications.";
-      return;
-    }
-    try {
-      var p = await Notification.requestPermission();
-      $("reminderInfo").textContent = p === "granted"
-        ? "Reminders are enabled. Keep the app installed/open for this single-file version."
-        : "Notification permission was not granted.";
-      renderTracker();
-    } catch(e) {}
-  });
-
-  $("morningTime").addEventListener("change", function() {
-    track.morningTime = this.value; saveTrack();
-  });
-  $("nightTime").addEventListener("change", function() {
-    track.nightTime = this.value; saveTrack();
-  });
-
-  $("reset90").addEventListener("click", function() {
-    if (!confirm("Start the 90-day journey again from today?")) return;
-    track = { startDate: localDateKey(), morning:false, night:false, lastMorning:"", lastNight:"", morningTime:track.morningTime||"07:00", nightTime:track.nightTime||"21:00" };
-    saveTrack();
-  });
-
-  function reminderTick() {
-    var today = localDateKey(), now = new Date();
-    if (dayNumber() >= 90) return;
-    var hm = String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
-    if ("Notification" in window && Notification.permission === "granted") {
-      if (hm === track.morningTime && track.lastMorning !== today) {
-        new Notification("Tawakkul — Morning", { body:"Day "+dayNumber()+" of 90. Begin your morning Tawakkul practice." });
-      }
-      if (hm === track.nightTime && track.lastNight !== today) {
-        new Notification("Tawakkul — Night", { body:"Day "+dayNumber()+" of 90. Take a quiet moment and hand it over to Allah." });
-      }
-    }
-  }
-
-  renderTracker();
-  setInterval(reminderTick, 30000);
-
-  /* ---------- single-file PWA install ---------- */
-  var deferredInstall = null;
-  var installPwa = $("installPwa");
-
-  window.addEventListener("beforeinstallprompt", function (e) {
-    e.preventDefault();
-    deferredInstall = e;
-    installPwa.classList.add("show");
-  });
-
-  installPwa.addEventListener("click", async function () {
-    if (!deferredInstall) return;
-    deferredInstall.prompt();
-    try { await deferredInstall.userChoice; } catch (e) {}
-    deferredInstall = null;
-    installPwa.classList.remove("show");
-  });
-
-  window.addEventListener("appinstalled", function () {
-    installPwa.classList.remove("show");
-  });
 
   /* ---------- colours ---------- */
   var C = { blot: [43, 42, 37], glow: [233, 190, 90], line: [207, 200, 182] };
@@ -617,7 +390,7 @@
     $("title").textContent = "Handed over";
     startBtn.textContent = "Breathe again";
   }
-  startBtn.addEventListener("click", function () { detectSession();
+  startBtn.addEventListener("click", function () {
     if (running) { running = false; startBtn.textContent = "Resume"; $("cueA").textContent = "Paused. Breathe naturally."; return; }
     if (!touched || finished) {
       if (finished || touched) buildPills();
@@ -657,7 +430,7 @@
     holdAwake(i === REST);
     if (i !== REST && document.body.classList.contains("dim")) { document.body.classList.remove("dim"); $("dim").textContent = "Dim the screen for sleep"; }
   }
-  $("next").addEventListener("click", function () { detectSession(); go(step === REST ? 0 : step + 1); window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); });
+  $("next").addEventListener("click", function () { go(step === REST ? 0 : step + 1); window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); });
   $("back").addEventListener("click", function () { if (step > 0) go(step - 1); });
 
   resize(); readColors(); buildPills(); go(0);
